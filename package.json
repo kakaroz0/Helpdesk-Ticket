@@ -1,0 +1,18 @@
+{
+  "name": "helpdesk-ticket-management",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Full-stack helpdesk support ticket management application.",
+  "type": "module",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "node scripts/dev.js",
+    "dev:backend": "npm --workspace backend run dev",
+    "dev:frontend": "npm --workspace frontend run dev",
+    "build": "npm --workspace frontend run build",
+    "test": "npm --workspace backend run test"
+  }
+}

@@ -1,0 +1,130 @@
+openapi: 3.0.3
+info:
+  title: Helpdesk Ticket API
+  version: 1.0.0
+servers:
+  - url: http://localhost:4000
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        "200":
+          description: API is available
+  /api/tickets:
+    get:
+      summary: List tickets
+      parameters:
+        - in: query
+          name: status
+          schema:
+            $ref: "#/components/schemas/TicketStatus"
+        - in: query
+          name: sortBy
+          schema:
+            type: string
+            enum: [status, createdAt, updatedAt]
+        - in: query
+          name: sortDirection
+          schema:
+            type: string
+            enum: [asc, desc]
+      responses:
+        "200":
+          description: Tickets returned
+    post:
+      summary: Create a ticket
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTicket"
+      responses:
+        "201":
+          description: Ticket created
+  /api/tickets/{id}:
+    get:
+      summary: Get a ticket
+      parameters:
+        - $ref: "#/components/parameters/TicketId"
+      responses:
+        "200":
+          description: Ticket returned
+        "404":
+          description: Ticket not found
+    patch:
+      summary: Update a ticket
+      parameters:
+        - $ref: "#/components/parameters/TicketId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTicket"
+      responses:
+        "200":
+          description: Ticket updated
+        "404":
+          description: Ticket not found
+    delete:
+      summary: Deletion is intentionally forbidden
+      parameters:
+        - $ref: "#/components/parameters/TicketId"
+      responses:
+        "405":
+          description: Tickets cannot be deleted
+components:
+  parameters:
+    TicketId:
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+  schemas:
+    TicketStatus:
+      type: string
+      enum: [pending, accepted, resolved, rejected]
+    Ticket:
+      type: object
+      required: [id, title, description, contactInformation, status, createdAt, updatedAt]
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        contactInformation:
+          type: string
+        status:
+          $ref: "#/components/schemas/TicketStatus"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    CreateTicket:
+      type: object
+      required: [title, description, contactInformation]
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        contactInformation:
+          type: string
+    UpdateTicket:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        contactInformation:
+          type: string
+        status:
+          $ref: "#/components/schemas/TicketStatus"
