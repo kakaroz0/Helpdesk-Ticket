@@ -170,6 +170,10 @@ export function App() {
           <span>Resolved</span>
           <strong>{counts.resolved || 0}</strong>
         </div>
+        <div>
+          <span>Rejected</span>
+          <strong>{counts.rejected || 0}</strong>
+        </div>
       </section>
 
       <section className="workspace-grid">

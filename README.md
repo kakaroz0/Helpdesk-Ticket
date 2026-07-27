@@ -1,69 +1,44 @@
-# Nipa.Cloud: Pre Interview Assignment for Developer
-
-AN INNOVATIVE, DISCIPLINED PROFESSIONAL TEAM  
-Together, We Create Success
-
-## Original Assignment
-
-For full-stack developers.
-
-Build a simple helpdesk support ticket management application, The application must consist of
-
-A RESTful-compliant API backend using any preferred technology stacks.
-
-A SPA-styled frontend application using any preferred JavaScript frontend frameworks with any UI toolkit.
-
-The application must be capable to
-
-Create a new ticket with these pieces of information; title, description, contact information, created timestamp, latest ticket update timestamp.
-
-Update a ticket's information and status (pending, accepted, resolved, rejected).
-
-List and sort tickets by status, latest update, and can filter tickets using status.
-
-Once a ticket is created, it cannot be deleted by any means.
-
-You can introduce any kind of UI workflow, such as a Kanban board for update a ticket's status, etc.
-
-Datastore is your choice, may vary from a database (both SQL and NoSQL), a JSON file, Firebase, even an in-memory store.
-
-What we expect from you are good code architecture layering (Presentation layer, Application layer, Persistence layer), good component decomposition, good aesthetic and creative design, good practices, and good coding habits. bring all best of you.
-
-Remarks
-
-Unit testing, API documentation, and specification, containerization is a plus.
-
-Use your preferred VCS provider (Gitlab, Github, Bitbucket, etc.) to deliver the result.
-
-## Project Summary
-
-This project is a full-stack helpdesk support ticket management application. It includes a RESTful API backend, a SPA frontend, JSON file persistence, unit/API tests, OpenAPI documentation, and Docker containerization.
-
 ## Requirement Checklist
 
-| Requirement | Status | Implementation |
-| --- | --- | --- |
-| RESTful-compliant API backend | Done | Node.js + Express API under `backend/src` |
-| SPA-styled frontend | Done | React + Vite app under `frontend/src` |
-| Create ticket | Done | `POST /api/tickets` and frontend intake form |
-| Ticket fields: title, description, contact information | Done | Validated by Zod and rendered in UI |
-| Created timestamp | Done | Backend sets `createdAt` automatically |
-| Latest update timestamp | Done | Backend sets and updates `updatedAt` automatically |
-| Update ticket information | Done | `PATCH /api/tickets/:id` and edit dialog |
-| Update status | Done | Edit dialog, Kanban drag/drop, and quick status actions |
-| Status values: pending, accepted, resolved, rejected | Done | Enforced by domain constants and Zod validation |
-| List tickets | Done | `GET /api/tickets` and ticket table |
-| Sort by status | Done | API query `sortBy=status` and UI sort control |
-| Sort by latest update | Done | API query `sortBy=updatedAt` and UI sort control |
-| Filter by status | Done | API query `status=pending` and UI filter control |
-| Tickets cannot be deleted | Done | `DELETE /api/tickets/:id` returns `405 Method Not Allowed` |
-| Kanban workflow | Done | Drag tickets across status columns |
-| Datastore | Done | JSON file datastore |
-| Good architecture layering | Done | Domain, Application, Persistence, Presentation layers |
-| Good component decomposition | Done | Separate React components for form, board, table, card, dialog, badge |
-| Unit testing | Done | Node test runner + Supertest, including validation tests |
-| API documentation/specification | Done | `backend/openapi.yaml` |
-| Containerization | Done | Dockerfiles and Docker Compose |
+###  Core Tech Stack
+| Requirement | Status | Implementation Details |
+| :--- | :---: | :--- |
+| **RESTful API Backend** | ✅ Done | Node.js + Express REST API (`backend/src`) |
+| **SPA Frontend** | ✅ Done | React + Vite Single Page App (`frontend/src`) |
+| **Datastore** | ✅ Done | JSON File datastore (`backend/data/tickets.json`) |
+
+###  Ticket Features & Operations
+| Feature | Status | Implementation Details |
+| :--- | :---: | :--- |
+| **Create Ticket** | ✅ Done | `POST /api/tickets` + Intake form (`title`, `description`, `contactInformation`) |
+| **Auto Timestamps** | ✅ Done | Backend automatically sets `createdAt` and updates `updatedAt` |
+| **Update Info & Status** | ✅ Done | `PATCH /api/tickets/:id` + Edit dialog (`pending`, `accepted`, `resolved`, `rejected`) |
+| **Immutable Records** | ✅ Done | `DELETE /api/tickets/:id` returns `405 Method Not Allowed` |
+| **List, Filter & Sort** | ✅ Done | `GET /api/tickets` + Status filter & Sort controls (`updatedAt`, `createdAt`, `status`) |
+| **Keyword Search** | ✅ Done | Real-time Search Bar for Title, Description & Contact info |
+
+###  UI/UX & Workflows
+| Workflow / Element | Status | Implementation Details |
+| :--- | :---: | :--- |
+| **Kanban Board** | ✅ Done | Interactive Drag & Drop board across 4 status columns |
+| **Quick Actions** | ✅ Done | Quick status change buttons on cards & Detail dialog |
+| **Metrics Summary** | ✅ Done | Real-time ticket status counts (`Total`, `Pending`, `Accepted`, `Resolved`, `Rejected`) |
+| **Toast Notifications** | ✅ Done | Animated floating toasts for feedback on create, update, drag-move & refresh |
+| **Responsive Design** | ✅ Done | Modern Vanilla CSS slate/teal theme, adaptive from Desktop to Mobile |
+
+###  Architecture & Best Practices
+| Requirement | Status | Implementation Details |
+| :--- | :---: | :--- |
+| **Layered Architecture** | ✅ Done | Separated Domain, Application, Persistence, and Presentation layers |
+| **Component Decomposition** | ✅ Done | Modular React components (`Form`, `Board`, `Card`, `Table`, `Dialog`, `Badge`, `Toast`) |
+
+###  Testing, Documentation & DevOps (Bonus / Remarks)
+| Extra Requirement | Status | Implementation Details |
+| :--- | :---: | :--- |
+| **Unit & API Testing** | ✅ Done | Node test runner + Supertest integration tests (`npm test`) |
+| **API Specification** | ✅ Done | OpenAPI 3.0 YAML specification (`backend/openapi.yaml`) |
+| **Containerization** | ✅ Done | Multi-stage Dockerfiles + `docker-compose.yml` |
+| **CI Automation** | ✅ Done | GitHub Actions workflow (`.github/workflows/ci.yml`) |
 
 ## Architecture
 
@@ -217,3 +192,43 @@ Update ticket example:
   "title": "Cannot login after reset"
 }
 ```
+
+### Testing Ticket Deletion (`DELETE /api/tickets/:id`)
+
+According to the requirement, once a ticket is created, it **cannot be deleted by any means**. Calling `DELETE /api/tickets/:id` will always return `405 Method Not Allowed`.
+
+#### Using cURL:
+
+```bash
+curl -i -X DELETE http://localhost:4000/api/tickets/ticket-123
+```
+
+Expected Response:
+
+```http
+HTTP/1.1 405 Method Not Allowed
+Content-Type: application/json; charset=utf-8
+
+{
+  "error": "Tickets are immutable records and cannot be deleted"
+}
+```
+
+#### Using PowerShell:
+
+```powershell
+Invoke-WebRequest -Uri "http://localhost:4000/api/tickets/ticket-123" -Method Delete
+```
+
+#### Using JavaScript `fetch`:
+
+```javascript
+const response = await fetch("http://localhost:4000/api/tickets/ticket-123", {
+  method: "DELETE"
+});
+
+console.log(response.status); // 405
+const result = await response.json();
+console.log(result); // { error: "Tickets are immutable records and cannot be deleted" }
+```
+
